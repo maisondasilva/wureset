@@ -1,8 +1,31 @@
+@ECHO OFF
+echo.
+attrib -h -r -s %windir%\system32\catroot2
+attrib -h -r -s %windir%\system32\catroot2\*.*
+echo Stopping Windows Update related services...
+echo ===========================================
+echo.
 net stop wuauserv
-net stop bits
-cd %windir%
-ren SoftwareDistribution SoftwareDistribution.old
-net stop cryptsvc
-cd %windir%\System32
-ren Catroot Catroot.old
-ren Catroot2 Catroot2.old
+net stop CryptSvc
+net stop BITS
+echo Done!
+echo.
+echo Renaming Windows Update related folders...
+echo ==========================================
+echo.
+ren %windir%\system32\catroot2 catroot2.old 
+ren %windir%\SoftwareDistribution sold.old
+ren "%ALLUSERSPROFILE%\application data\Microsoft\Network\downloader" downloader.old
+echo Done!
+echo.
+echo Starting Windows Update related services...
+echo ===========================================
+echo.
+net Start BITS
+net start CryptSvc
+net start wuauserv
+echo Done!
+echo.
+echo Task completed successfully...
+echo.
+PAUSE
